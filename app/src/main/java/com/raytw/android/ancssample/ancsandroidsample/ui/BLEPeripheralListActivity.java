@@ -1,5 +1,6 @@
 package com.raytw.android.ancssample.ancsandroidsample.ui;
 
+import android.Manifest;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothAdapter.LeScanCallback;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.raytw.android.ancssample.ancsandroidsample.R;
+import com.raytw.android.ancssample.ancsandroidsample.util.PermissionsRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ import java.util.List;
 public class BLEPeripheralListActivity extends ListActivity {
 
     public String TAG = getClass().getSimpleName();
-
+    private PermissionsRequest mPermissionsRequest;
     public static final String PREFS_NAME = "MyPrefsFile";
     public static final String BleStateKey = "ble_state";
     public static final String BleAddrKey = "ble_addr";
@@ -106,16 +108,27 @@ public class BLEPeripheralListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
+        mPermissionsRequest = buildPermissionsRequest();
+        mPermissionsRequest.doCheckPermission(false);
+
         buttonScan = (Button) findViewById(R.id.scan);
         mAutoCheckBox = (CheckBox) findViewById(R.id.autoconnect);
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (!isBLEScaning) {
-                    mBluetoothDeviceList.clear();
-                    scan(true);
+                if (PermissionsRequest.isPermissionGranted(
+                        BLEPeripheralListActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    if (!isBLEScaning) {
+                        mBluetoothDeviceList.clear();
+                        scan(true);
+                    } else {
+                        scan(false);
+                    }
                 } else {
-                    scan(false);
+                    Toast.makeText(getApplicationContext(),
+                            "please setting app permission", Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
         });
@@ -204,4 +217,31 @@ public class BLEPeripheralListActivity extends ListActivity {
         finish();
     }
 
+
+    private PermissionsRequest buildPermissionsRequest() {
+        return new PermissionsRequest(this) {
+            // 要請求權限時的callback
+            @Override
+            public List<String> getCheckPeremission() {
+                ArrayList<String> permissionsNeeded = new ArrayList<String>();
+                permissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+
+                return permissionsNeeded;
+            }
+
+            // 檢查權限完成，不論是否有取得授權，onCheckPeremissionCompleted一定會執行
+            @Override
+            public void onCheckPeremissionCompleted() {
+            }
+        };
+    }
+
+    @Override
+    public final void onRequestPermissionsResult(int requestCode,
+                                                 String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        mPermissionsRequest.onRequestPermissionsResult(requestCode,
+                permissions, grantResults);
+    }
 }
