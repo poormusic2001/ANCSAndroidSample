@@ -22,14 +22,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.raytw.android.ancssample.ancsandroidsample.BLEConnect;
 import com.raytw.android.ancssample.ancsandroidsample.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ListActivity {
+public class BLEPeripheralListActivity extends ListActivity {
 
     public String TAG = getClass().getSimpleName();
 
@@ -48,7 +47,7 @@ public class MainActivity extends ListActivity {
         public View getView(int i, View arg1, ViewGroup arg2) {
             TextView tv = (TextView) arg1;
             if (null == tv) {
-                tv = new TextView(MainActivity.this);
+                tv = new TextView(BLEPeripheralListActivity.this);
                 tv.setPadding(10, 10, 10, 10);
                 tv.setTextSize(20);
             }
@@ -198,7 +197,7 @@ public class MainActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         BluetoothDevice dev = mBluetoothDeviceList.get(position);
         scan(false);
-        Intent intent = new Intent(this, BLEConnect.class);
+        Intent intent = new Intent(this, BLEConnectActivity.class);
         intent.putExtra("addr", dev.getAddress());
         intent.putExtra("auto", mAutoCheckBox.isChecked());
         startActivity(intent);

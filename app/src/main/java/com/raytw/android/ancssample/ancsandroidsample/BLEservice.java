@@ -22,7 +22,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.raytw.android.ancssample.ancsandroidsample.ANCSGattCallback.StateListener;
-import com.raytw.android.ancssample.ancsandroidsample.ui.MainActivity;
+import com.raytw.android.ancssample.ancsandroidsample.ui.BLEPeripheralListActivity;
 
 public class BLEservice extends Service implements ANCSParser.onIOSNotification, ANCSGattCallback.StateListener {
     private String TAG = getClass().getSimpleName();
@@ -36,7 +36,7 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
     int mBleANCS_state = 0;
 
     public class MyBinder extends Binder {
-        BLEservice getService() {
+        public BLEservice getService() {
             // Return this instance so clients can call public methods
             return BLEservice.this;
         }
@@ -99,8 +99,8 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
         Log.i(TAG, " onDestroy()");
         mANCSGCattCallback.stop();
         unregisterReceiver(mBtOnOffReceiver);
-        Editor editor = getSharedPreferences(MainActivity.PREFS_NAME, 0).edit();
-        editor.putInt(MainActivity.BleStateKey, ANCSGattCallback.BleDisconnect);
+        Editor editor = getSharedPreferences(BLEPeripheralListActivity.PREFS_NAME, 0).edit();
+        editor.putInt(BLEPeripheralListActivity.BleStateKey, ANCSGattCallback.BleDisconnect);
         editor.commit();
         super.onDestroy();
     }

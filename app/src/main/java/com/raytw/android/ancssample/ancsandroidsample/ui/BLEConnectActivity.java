@@ -1,4 +1,4 @@
-package com.raytw.android.ancssample.ancsandroidsample;
+package com.raytw.android.ancssample.ancsandroidsample.ui;
 
 
 import android.app.Activity;
@@ -18,12 +18,14 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.raytw.android.ancssample.ancsandroidsample.ANCSGattCallback;
 import com.raytw.android.ancssample.ancsandroidsample.ANCSGattCallback.StateListener;
+import com.raytw.android.ancssample.ancsandroidsample.BLEservice;
 import com.raytw.android.ancssample.ancsandroidsample.BLEservice.MyBinder;
-import com.raytw.android.ancssample.ancsandroidsample.ui.MainActivity;
+import com.raytw.android.ancssample.ancsandroidsample.R;
 
 
-public class BLEConnect extends Activity implements StateListener {
+public class BLEConnectActivity extends Activity implements StateListener {
     private String TAG = getClass().getSimpleName();
     SharedPreferences mSharedPreference;
     String address;
@@ -48,7 +50,7 @@ public class BLEConnect extends Activity implements StateListener {
         address = getIntent().getStringExtra("addr");
         isAuto = getIntent().getBooleanExtra("auto", true);
 
-        mSharedPreference = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+        mSharedPreference = getSharedPreferences(BLEPeripheralListActivity.PREFS_NAME, 0);
 
         Log.e(TAG, "mAuto:" + isAuto);
 
@@ -58,7 +60,7 @@ public class BLEConnect extends Activity implements StateListener {
                 public void onClick(View arg0) {
                     if (null != mBLEservice) {
                         mBLEservice.connect();
-                        Toast.makeText(BLEConnect.this, R.string.connect_notice, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BLEConnectActivity.this, R.string.connect_notice, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -103,7 +105,7 @@ public class BLEConnect extends Activity implements StateListener {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
-        bindService(mIntent, conn, 1);
+        bindService(mIntent, conn, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -156,9 +158,9 @@ public class BLEConnect extends Activity implements StateListener {
     @Override
     public void onStateChanged(final int state) {
         SharedPreferences.Editor edit = mSharedPreference.edit();
-        edit.putInt(MainActivity.BleStateKey, state);
-        edit.putString(MainActivity.BleAddrKey, address);
-        edit.putBoolean(MainActivity.BleAutoKey, isAuto);
+        edit.putInt(BLEPeripheralListActivity.BleStateKey, state);
+        edit.putString(BLEPeripheralListActivity.BleAddrKey, address);
+        edit.putBoolean(BLEPeripheralListActivity.BleAutoKey, isAuto);
         // edit.commit();
         // log("put state : "+state);
         runOnUiThread(new Runnable() {
