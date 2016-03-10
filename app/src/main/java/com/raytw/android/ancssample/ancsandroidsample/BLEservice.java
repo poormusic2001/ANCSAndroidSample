@@ -7,6 +7,7 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,8 @@ import android.util.Log;
 
 import com.raytw.android.ancssample.ancsandroidsample.ANCSGattCallback.StateListener;
 import com.raytw.android.ancssample.ancsandroidsample.ui.BLEPeripheralListActivity;
+
+import java.util.List;
 
 public class BLEservice extends Service implements ANCSParser.onIOSNotification, ANCSGattCallback.StateListener {
     private String TAG = getClass().getSimpleName();
@@ -131,7 +134,7 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
 
     // ** public method , for client to call
     public void startBleConnect(String addr, boolean auto) {
-        Log.i(TAG, "startBleConnect");
+        Log.i(TAG, "startBleConnect-begin-");
         if (mBleANCS_state != 0) {
             Log.i(TAG, "stop ancs,then restart it");
             mANCSGCattCallback.stop();
@@ -143,6 +146,7 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
         mBluetoothGatt = dev.connectGatt(this, auto, mANCSGCattCallback);
         mANCSGCattCallback.setBluetoothGatt(mBluetoothGatt);
         mANCSGCattCallback.setStateStart();
+        Log.i(TAG, "startBleConnect-end-(waiting callback)");
     }
 
     public void registerStateChanged(StateListener stateListener) {
@@ -161,7 +165,11 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
         return mANCSGCattCallback.getState();
     }
 
-    public int getmBleANCS_state() {
+    public List<BluetoothGattService> getBluetoothGattServices(){
+        return mBluetoothGatt.getServices();
+    }
+
+    public int getBleANCSstate() {
         return mBleANCS_state;
     }
 

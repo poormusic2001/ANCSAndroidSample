@@ -21,14 +21,6 @@
             android:layout_weight="1"
             android:text="@string/scan" />
 
-        <CheckBox
-            android:visibility="gone"
-            android:id="@+id/autoconnect"
-            android:layout_width="0dp"
-            android:layout_weight="1" 
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="@string/auto"/>
     </LinearLayout>
 
     <ListView

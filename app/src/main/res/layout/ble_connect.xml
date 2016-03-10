@@ -4,27 +4,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/ble_state"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:maxLines="65536"
-        android:lines="65536"
-        android:textColor="#FFFFFF"
-        android:background="#000000" />
+        android:layout_height="wrap_content">
 
-    <CheckBox 
-        android:id="@+id/exit_service"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="@string/exit_service"/>
-    <ListView
-        android:id="@+id/lv"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-    </ListView>
+        <TextView
+            android:id="@+id/ble_state"
+            android:gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLines="65536"
+            android:lines="65536"
+            android:scrollbars = "vertical"
+            android:textColor="#FFFFFF"
+            android:background="#000000" />
+    </LinearLayout>
+
+
+
 </LinearLayout>

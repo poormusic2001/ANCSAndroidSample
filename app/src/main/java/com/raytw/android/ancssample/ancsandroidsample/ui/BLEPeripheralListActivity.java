@@ -13,12 +13,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,42 +41,8 @@ public class BLEPeripheralListActivity extends ListActivity {
     private BluetoothAdapter mBluetoothAdapter;
     private boolean isBLEScaning = false;
     private Button buttonScan;
-    private CheckBox mAutoCheckBox;
     private List<BluetoothDevice> mBluetoothDeviceList = new ArrayList<BluetoothDevice>();
-    private BaseAdapter mListAdapter = new BaseAdapter() {
-
-        @Override
-        public View getView(int i, View arg1, ViewGroup arg2) {
-            TextView tv = (TextView) arg1;
-            if (null == tv) {
-                tv = new TextView(BLEPeripheralListActivity.this);
-                tv.setPadding(10, 10, 10, 10);
-                tv.setTextSize(20);
-            }
-            BluetoothDevice dev = mBluetoothDeviceList.get(i);
-            String name = dev.getName();
-            if (TextUtils.isEmpty(name)) {
-                name = dev.getAddress();
-            }
-            tv.setText(name);
-            return tv;
-        }
-
-        @Override
-        public long getItemId(int arg0) {
-            return 0;
-        }
-
-        @Override
-        public Object getItem(int arg0) {
-            return null;
-        }
-
-        @Override
-        public int getCount() {
-            return mBluetoothDeviceList.size();
-        }
-    };
+    private BLEDeviceListAdapter mListAdapter = new BLEDeviceListAdapter();
 
     private LeScanCallback mLEScanCallback = new LeScanCallback() {
 
@@ -112,7 +78,6 @@ public class BLEPeripheralListActivity extends ListActivity {
         mPermissionsRequest.doCheckPermission(false);
 
         buttonScan = (Button) findViewById(R.id.scan);
-        mAutoCheckBox = (CheckBox) findViewById(R.id.autoconnect);
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -190,12 +155,6 @@ public class BLEPeripheralListActivity extends ListActivity {
         super.onDestroy();
     }
 
-    // @Override
-    // public boolean onCreateOptionsMenu(Menu menu) {
-    // getMenuInflater().inflate(R.menu.devices, menu);
-    // return true;
-    // }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -212,7 +171,7 @@ public class BLEPeripheralListActivity extends ListActivity {
         scan(false);
         Intent intent = new Intent(this, BLEConnectActivity.class);
         intent.putExtra("addr", dev.getAddress());
-        intent.putExtra("auto", mAutoCheckBox.isChecked());
+        intent.putExtra("auto", true);
         startActivity(intent);
         finish();
     }
@@ -243,5 +202,38 @@ public class BLEPeripheralListActivity extends ListActivity {
 
         mPermissionsRequest.onRequestPermissionsResult(requestCode,
                 permissions, grantResults);
+    }
+
+    private class BLEDeviceListAdapter extends BaseAdapter{
+
+        @Override
+        public View getView(int i, View arg1, ViewGroup arg2) {
+            if (arg1 == null) {
+                arg1 = LayoutInflater.from(BLEPeripheralListActivity.this).inflate(R.layout.bledevice_list_item, null);
+            }
+            BluetoothDevice dev = mBluetoothDeviceList.get(i);
+            String name = dev.getName();
+            if (TextUtils.isEmpty(name)) {
+                name = dev.getAddress();
+            }
+
+            ((TextView)arg1.findViewById(R.id.device_name)).setText(name);
+            return arg1;
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int arg0) {
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return mBluetoothDeviceList.size();
+        }
     }
 }

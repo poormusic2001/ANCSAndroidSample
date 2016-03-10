@@ -3,6 +3,7 @@ package com.raytw.android.ancssample.ancsandroidsample.ui;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,9 +13,9 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,10 @@ import com.raytw.android.ancssample.ancsandroidsample.ANCSGattCallback;
 import com.raytw.android.ancssample.ancsandroidsample.ANCSGattCallback.StateListener;
 import com.raytw.android.ancssample.ancsandroidsample.BLEservice;
 import com.raytw.android.ancssample.ancsandroidsample.BLEservice.MyBinder;
+import com.raytw.android.ancssample.ancsandroidsample.GattConstant;
 import com.raytw.android.ancssample.ancsandroidsample.R;
+
+import java.util.List;
 
 
 public class BLEConnectActivity extends Activity implements StateListener {
@@ -32,7 +36,6 @@ public class BLEConnectActivity extends Activity implements StateListener {
     boolean isAuto; // whether connectGatt(,auto,)
     boolean isBond;
     TextView mStateText;
-    CheckBox checkBox_ExitService;
     BLEservice mBLEservice;
     Intent mIntent;
     int mCachedState;
@@ -45,7 +48,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
 
         setContentView(R.layout.ble_connect);
         mStateText = (TextView) findViewById(R.id.ble_state);
-        checkBox_ExitService = (CheckBox) findViewById(R.id.exit_service);
+        mStateText.setMovementMethod(new ScrollingMovementMethod());
 
         address = getIntent().getStringExtra("addr");
         isAuto = getIntent().getBooleanExtra("auto", true);
@@ -72,10 +75,6 @@ public class BLEConnectActivity extends Activity implements StateListener {
         mIntent.putExtra("auto", isAuto);
         startService(mIntent);
 
-        // if (!BluetoothAdapter.checkBluetoothAddress(addr)) {
-        // finish();
-        // return;
-        // }
         mBtOnOffReceiver = new BroadcastReceiver() {
             public void onReceive(Context arg0, Intent intent) {
                 // action must be bt on/off .
@@ -113,9 +112,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
         Log.i(TAG, "onStop");
         unregisterReceiver(mBtOnOffReceiver);
         unbindService(conn);
-        if (checkBox_ExitService.isChecked()) {
-            stopService(mIntent);
-        }
+        stopService(mIntent);
         super.onStop();
     }
 
@@ -140,8 +137,8 @@ public class BLEConnectActivity extends Activity implements StateListener {
 
     private void startConnectGatt() {
         // FIXME: there is a bug in here.
-        Log.i(TAG, "startConnectGatt " + "mCachedState:" + mCachedState + "getmBleANCS_state:" + mBLEservice.getmBleANCS_state());
-        if (mBLEservice.getmBleANCS_state() != ANCSGattCallback.BleDisconnect) {
+        Log.i(TAG, "startConnectGatt " + "mCachedState:" + mCachedState + "getmBleANCS_state:" + mBLEservice.getBleANCSstate());
+        if (mBLEservice.getBleANCSstate() != ANCSGattCallback.BleDisconnect) {
             final String str = mBLEservice.getStateDes();
             mStateText.append("startConnectGatt:"+str + "\n");
         } else if (ANCSGattCallback.BleDisconnect == mCachedState) {
@@ -157,17 +154,40 @@ public class BLEConnectActivity extends Activity implements StateListener {
 
     @Override
     public void onStateChanged(final int state) {
-        SharedPreferences.Editor edit = mSharedPreference.edit();
-        edit.putInt(BLEPeripheralListActivity.BleStateKey, state);
-        edit.putString(BLEPeripheralListActivity.BleAddrKey, address);
-        edit.putBoolean(BLEPeripheralListActivity.BleAutoKey, isAuto);
-        // edit.commit();
-        // log("put state : "+state);
         runOnUiThread(new Runnable() {
             public void run() {
-                mStateText.append("onStateChanged:"+mBLEservice.getStateDes() + "\n");
+                mStateText.append("onStateChanged:" + mBLEservice.getStateDes() + "\n");
             }
         });
+
+        if(state == ANCSGattCallback.BleBuildDiscovered){
+            List<BluetoothGattService> bleServices = mBLEservice.getBluetoothGattServices();
+            final StringBuffer strBuf = new StringBuffer();
+
+            for(BluetoothGattService service : bleServices){
+                if(GattConstant.Apple.sUUIDANCService.equals(service.getUuid())){
+                    strBuf.append(service.getUuid() + " => ANCS" + "\n");
+                }else{
+                    strBuf.append(service.getUuid() + "\n");
+                }
+            }
+            Log.d(TAG, "bleServices,size["+bleServices.size()+"]");
+            if(strBuf.length() > 0){
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        mStateText.append("allServicesUUID-----begin-----\n");
+                        mStateText.append(strBuf.toString());
+                        mStateText.append("allServicesUUID-----end-----\n");
+                    }
+                });
+                return;
+            }
+        }
     }
 
+    public void onBackPressed() {
+        Intent intent = new Intent(this, BLEPeripheralListActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

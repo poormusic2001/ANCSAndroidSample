@@ -20,8 +20,9 @@ public class ANCSGattCallback extends BluetoothGattCallback {
     public static final int BleBuildConnectedGatt = 2; // onConnectionStateChange() state==2
     public static final int BleBuildDiscoverService = 3;// discoverServices()... this block
     public static final int BleBuildDiscoverOver = 4; // discoverServices() ok
-    public static final int BleBuildSetingANCS = 5; // settingANCS eg. need pwd...
-    public static final int BleBuildNotify = 6; // notify arrive
+    public static final int BleBuildDiscovered = 5; // discoverServices() BleBuildDiscovered callback
+    public static final int BleBuildSetingANCS = 6; // settingANCS eg. need pwd...
+    public static final int BleBuildNotify = 7; // notify arrive
 
     private String TAG = getClass().getSimpleName();
     private Context mContext;
@@ -94,12 +95,14 @@ public class ANCSGattCallback extends BluetoothGattCallback {
             case BleBuildDiscoverOver: // 4
                 state = "GATT [Connected]\n" + "discoverServices OVER\n";
                 break;
-            case BleBuildSetingANCS: // 5
+            case BleBuildDiscovered: // 5
+                state = "GATT [Connected]\n" + "BleBuildDiscovered\n";
+                break;
+            case BleBuildSetingANCS: // 6
                 state = "GATT [Connected]\n" + "discoverServices OVER\n" + "setting ANCS...password";
                 break;
-            case BleBuildNotify: // 6
+            case BleBuildNotify: // 7
                 state = "ANCS notify arrive\n";
-
 
                 break;
             case BleAncsConnected: // 10
@@ -146,9 +149,7 @@ public class ANCSGattCallback extends BluetoothGattCallback {
         if (newState == BluetoothProfile.STATE_CONNECTED && status == BluetoothGatt.GATT_SUCCESS) {
             Log.i(TAG, "start discover service");
             mBleState = BleBuildDiscoverService;
-            for (StateListener stateListener : mStateListenersList) {
-                stateListener.onStateChanged(mBleState);
-            }
+
             mBluetoothGatt.discoverServices();
             Log.i(TAG, "discovery service end");
             mBleState = BleBuildDiscoverOver;
@@ -163,8 +164,18 @@ public class ANCSGattCallback extends BluetoothGattCallback {
     // New services discovered
     public void onServicesDiscovered(BluetoothGatt mBluetoothGatt, int status) {
         Log.d(TAG, "onServicesDiscovered,status[" + status + "]");
+        mBleState = BleBuildDiscovered;
+        for (StateListener stateListener : mStateListenersList) {
+            stateListener.onStateChanged(mBleState);
+        }
         if (status != 0)
             return;
+        //TODO
+        Log.d("service_uuid","getServices,size=>" + mBluetoothGatt.getServices());
+        for(BluetoothGattService obj : mBluetoothGatt.getServices()){
+            Log.d("service_uuid","service_uuid=>" + obj.getUuid());
+        }
+
         BluetoothGattService bluetoothGattService = mBluetoothGatt.getService(GattConstant.Apple.sUUIDANCService);
         if (bluetoothGattService == null) {
             Log.i(TAG, "cannot find ANCS uuid");
