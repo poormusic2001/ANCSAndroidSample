@@ -31,7 +31,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
     String address;
     boolean isAuto; // whether connectGatt(,auto,)
     boolean isBond;
-    TextView tv_State;
+    TextView mStateText;
     CheckBox checkBox_ExitService;
     BLEservice mBLEservice;
     Intent mIntent;
@@ -44,7 +44,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
         Log.i(TAG, "onCreate");
 
         setContentView(R.layout.ble_connect);
-        tv_State = (TextView) findViewById(R.id.ble_state);
+        mStateText = (TextView) findViewById(R.id.ble_state);
         checkBox_ExitService = (CheckBox) findViewById(R.id.exit_service);
 
         address = getIntent().getStringExtra("addr");
@@ -55,7 +55,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
         Log.e(TAG, "mAuto:" + isAuto);
 
         if (!isAuto) {
-            tv_State.setOnClickListener(new View.OnClickListener() {
+            mStateText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View arg0) {
                     if (null != mBLEservice) {
@@ -143,7 +143,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
         Log.i(TAG, "startConnectGatt " + "mCachedState:" + mCachedState + "getmBleANCS_state:" + mBLEservice.getmBleANCS_state());
         if (mBLEservice.getmBleANCS_state() != ANCSGattCallback.BleDisconnect) {
             final String str = mBLEservice.getStateDes();
-            tv_State.setText(str);
+            mStateText.append("startConnectGatt:"+str + "\n");
         } else if (ANCSGattCallback.BleDisconnect == mCachedState) {
             Log.i(TAG, "connect ble");
             mBLEservice.startBleConnect(address, isAuto);
@@ -151,7 +151,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
         } else { // just display current state
 
             final String str = mBLEservice.getStateDes();
-            tv_State.setText(str);
+            mStateText.append("startConnectGatt:"+str + "\n");
         }
     }
 
@@ -165,7 +165,7 @@ public class BLEConnectActivity extends Activity implements StateListener {
         // log("put state : "+state);
         runOnUiThread(new Runnable() {
             public void run() {
-                tv_State.setText(mBLEservice.getStateDes());
+                mStateText.append("onStateChanged:"+mBLEservice.getStateDes() + "\n");
             }
         });
     }

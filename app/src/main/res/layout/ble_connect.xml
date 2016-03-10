@@ -7,17 +7,22 @@
     <TextView
         android:id="@+id/ble_state"
         android:layout_width="match_parent"
-        android:layout_height="319dp"
+        android:layout_height="match_parent"
+        android:maxLines="65536"
+        android:lines="65536"
+        android:textColor="#FFFFFF"
         android:background="#000000" />
 
     <CheckBox 
         android:id="@+id/exit_service"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/exit_service"/>
     <ListView
         android:id="@+id/lv"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
