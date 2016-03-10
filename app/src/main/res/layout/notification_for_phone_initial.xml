@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout_notification"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/notify_bar_background"
+    android:gravity="center_vertical" >
+
+    <ImageView
+        android:id="@+id/imageView_user"
+        android:layout_width="83dp"
+        android:layout_height="83dp"
+        android:src="@drawable/notify_icon_default"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/phone_app_name"
+        style="@style/sp22_text"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/imageView_user"
+        android:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/phone_notification_content"
+        style="@style/sp22_text"
+        android:layout_width="600dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/phone_app_name"
+        android:ellipsize="end"
+        android:gravity="center|right"
+        android:lines="1"
+        android:text="JACK: hello test" />
+
+    
+
+</RelativeLayout>

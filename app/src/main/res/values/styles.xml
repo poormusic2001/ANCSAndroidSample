@@ -1,0 +1,60 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="android:Theme.Light" />
+
+    <style name="main_menu_textview">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="sp14_text">
+        <item name="android:shadowColor">#88000000</item>
+        <item name="android:shadowRadius">0.1</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+        <style name="sp18_text">
+        <item name="android:shadowColor">#88000000</item>
+        <item name="android:shadowRadius">0.1</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="sp22_text">
+        <item name="android:shadowColor">#88000000</item>
+        <item name="android:shadowRadius">0.1</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="sp26_text">
+        <item name="android:shadowColor">#88000000</item>
+        <item name="android:shadowRadius">0.1</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="sp30_text">
+        <item name="android:shadowColor">#88000000</item>
+        <item name="android:shadowRadius">0.1</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+		<!-- reply notification contact Button -->
+	 <style name="ReplyNotificationContactClick">
+		<item name="android:background">@drawable/notification_contact_click_nsi3</item>
+	</style>
+</resources>
