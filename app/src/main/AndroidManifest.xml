@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.raytw.android.ancssample.ancsandroidsample"
     android:versionCode="1"
-    android:versionName="1.0.0.20160310001">
+    android:versionName="1.0.0.20160311001">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -12,17 +12,18 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@android:style/Theme.Black.NoTitleBar">
         <activity
             android:name=".ui.BLEPeripheralListActivity"
-            android:label="@string/app_name" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.BLEConnectActivity"></activity>
+        <activity android:name=".ui.BLEConnectActivity"
+            android:screenOrientation="portrait"></activity>
         <service android:name="com.raytw.android.ancssample.ancsandroidsample.BLEservice" >
         </service>
     </application>
