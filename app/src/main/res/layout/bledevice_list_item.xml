@@ -6,36 +6,39 @@
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/frameLayout_bleItem"
+    <RelativeLayout
+        android:id="@+id/relativeLayout_bleItem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" >
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout_bleItem"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/device_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" >
-
-            <TextView
-                android:id="@+id/device_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:singleLine="true"
-                android:textColor="#000000"
-                android:textSize="14sp"
-                android:text="wet" />
-            <Button
-                android:id="@+id/ancs"
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ANCS"
-                android:layout_alignParentTop="true"/>
-        </RelativeLayout>
-    </FrameLayout>
-
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:singleLine="true"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:text="wet" />
+        <Button
+            android:id="@+id/ancs"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ANCS"
+            android:layout_alignParentTop="true"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/device_bt_hardware_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:singleLine="true"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:text="wet" />
 </LinearLayout>

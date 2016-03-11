@@ -214,10 +214,17 @@ public class BLEPeripheralListActivity extends ListActivity {
             BluetoothDevice dev = mBluetoothDeviceList.get(i);
             String name = dev.getName();
             if (TextUtils.isEmpty(name)) {
-                name = dev.getAddress();
+                name = "unknow";
             }
 
-            ((TextView)arg1.findViewById(R.id.device_name)).setText(name);
+            ((TextView)arg1.findViewById(R.id.device_name)).setText("name="+name);
+
+            String address = dev.getAddress();
+            if (TextUtils.isEmpty(address)) {
+                address = "unknow";
+            }
+            ((TextView)arg1.findViewById(R.id.device_bt_hardware_address)).setText("address="+address);
+
             return arg1;
         }
 
