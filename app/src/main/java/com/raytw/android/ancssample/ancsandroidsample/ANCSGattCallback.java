@@ -116,7 +116,7 @@ public class ANCSGattCallback extends BluetoothGattCallback {
     @Override
     public void onCharacteristicChanged(BluetoothGatt mBluetoothGatt, BluetoothGattCharacteristic mBluetoothGattCharacteristic) {
         UUID uuid = mBluetoothGattCharacteristic.getUuid();
-        Log.d(TAG, "測試::onCharacteristicChanged,uuid[" + uuid + "]");
+        Log.d(TAG, "test::onCharacteristicChanged,uuid[" + uuid + "]");
         if (uuid.equals(GattConstant.Apple.sUUIDChaNotify)) {
 
             Log.i(TAG, "Notify uuid");
@@ -139,8 +139,7 @@ public class ANCSGattCallback extends BluetoothGattCallback {
 
     @Override
     public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-        Log.d(TAG, "測試::onConnectionStateChange,status[" + status + "],newState[" + newState + "]");
-        Log.i(TAG, "onConnectionStateChange" + "newState " + newState + "status:" + status);
+        Log.i(TAG, "onConnectionStateChange,newState " + newState + "status:" + status);
         mBleState = newState;
         // below code is necessary?
         for (StateListener stateListener : mStateListenersList) {

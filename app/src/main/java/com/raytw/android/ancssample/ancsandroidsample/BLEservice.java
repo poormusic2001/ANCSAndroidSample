@@ -101,6 +101,7 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
     public void onDestroy() {
         Log.i(TAG, " onDestroy()");
         mANCSGCattCallback.stop();
+        mANCSHandler.unlistenIOSNotification(this);
         unregisterReceiver(mBtOnOffReceiver);
         Editor editor = getSharedPreferences(BLEPeripheralListActivity.PREFS_NAME, 0).edit();
         editor.putInt(BLEPeripheralListActivity.BleStateKey, ANCSGattCallback.BleDisconnect);
@@ -119,9 +120,10 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
     public void onIOSNotificationAdd(IOSNotification noti) {
         NotificationCompat.Builder build = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(noti.title).setContentText(noti.message);
+        build.setTicker(noti.title);
         Log.e(TAG, "noti.title===>" + noti.title);
         Log.e(TAG, "noti.message===>" + noti.message);
-        // 通知用預設聲音
+        // set default sound
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         build.setSound(uri);
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(noti.uid, build.build());

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -131,6 +130,9 @@ public class ANCSParser {
             onIOSNotificationList.add(onIOSNotify);
     }
 
+    public void unlistenIOSNotification(onIOSNotification onIOSNotify) {
+        onIOSNotificationList.remove(onIOSNotify);
+    }
 
     public void setService(BluetoothGattService btGattService, BluetoothGatt btGatt) {
         mBTGatt = btGatt;
@@ -153,8 +155,6 @@ public class ANCSParser {
         for (onIOSNotification notificationItem : onIOSNotificationList) {
             notificationItem.onIOSNotificationAdd(notiification);
         }
-        // TODO 解析完notication並顯示
-        Toast.makeText(mContext, "收到訊息,title[" + notiification.title + "],message[" + notiification.message + "]", Toast.LENGTH_LONG).show();
     }
 
     private void cancelNotification(int uid) {
