@@ -36,7 +36,7 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
     BroadcastReceiver mBtOnOffReceiver;
     boolean isAuto;
     String addr;
-    int mBleANCS_state = 0;
+    private int mBleANCSstate = 0;
 
     public class MyBinder extends Binder {
         public BLEservice getService() {
@@ -135,7 +135,7 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
     // ** public method , for client to call
     public void startBleConnect(String addr, boolean auto) {
         Log.i(TAG, "startBleConnect-begin-");
-        if (mBleANCS_state != 0) {
+        if (mBleANCSstate != 0) {
             Log.i(TAG, "stop ancs,then restart it");
             mANCSGCattCallback.stop();
         }
@@ -170,12 +170,12 @@ public class BLEservice extends Service implements ANCSParser.onIOSNotification,
     }
 
     public int getBleANCSstate() {
-        return mBleANCS_state;
+        return mBleANCSstate;
     }
 
     @Override
     public void onStateChanged(int state) {
-        mBleANCS_state = state;
+        mBleANCSstate = state;
     }
 
 }

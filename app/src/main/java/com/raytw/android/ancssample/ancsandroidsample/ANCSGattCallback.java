@@ -170,11 +170,6 @@ public class ANCSGattCallback extends BluetoothGattCallback {
         }
         if (status != 0)
             return;
-        //TODO
-        Log.d("service_uuid","getServices,size=>" + mBluetoothGatt.getServices());
-        for(BluetoothGattService obj : mBluetoothGatt.getServices()){
-            Log.d("service_uuid","service_uuid=>" + obj.getUuid());
-        }
 
         BluetoothGattService bluetoothGattService = mBluetoothGatt.getService(GattConstant.Apple.sUUIDANCService);
         if (bluetoothGattService == null) {
@@ -214,8 +209,6 @@ public class ANCSGattCallback extends BluetoothGattCallback {
         mANCSHandler.setService(bluetoothGattService, mBluetoothGatt);
         ANCSParser.get().reset();
         Log.i(TAG, "found ANCS service & set DS character,descriptor OK !");
-
-
     }
 
     @Override
